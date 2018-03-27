@@ -1,9 +1,12 @@
 package br.com.projeto.comanda.domain;
 
+import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,20 +17,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import br.com.projeto.comanda.domain.enums.StatusPedido;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "web_pedido")
-public class Pedido {
+public class Pedido  implements Serializable {
+	private static final long serialVersionUID=1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Double valor;
+	@Column(name = "valor_total")
+	private Double valortotal;
 
 	@NotNull
 	private Integer estado;
+
+	@Column(name = "data_pedido")
+	private Date datapedido;
 
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
@@ -36,33 +44,32 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name = "id_mesa")
 	private Mesa mesa;
-
-	@OneToMany(mappedBy = "id.pedido")
-	private List<ItemPedido> itens = new LinkedList<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="pedido", cascade=CascadeType.ALL)
+	private List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
 
 	public Pedido() {
 
 	}
 
-	public Pedido(Double valor, StatusPedido estado, Usuario usuario, Mesa mesa) {
+	/**
+	 * @param valortotal
+	 * @param estado
+	 * @param datapedido
+	 * @param usuario
+	 * @param mesa
+	 * @param itensPedido
+	 */
+	public Pedido(Double valortotal, Integer estado, Date datapedido, Usuario usuario, Mesa mesa,
+			List<ItemPedido> itensPedido) {
 		super();
-		this.valor = valor;
-		this.estado = estado.getCod();
+		this.valortotal = valortotal;
+		this.estado = estado;
+		this.datapedido = datapedido;
 		this.usuario = usuario;
 		this.mesa = mesa;
-		// this.itens.add(item);
-	}
-
-	public void comprar(Pedido pedido, Produto produto, Integer quantidade) {
-
-		ItemPedido itemPedido = new ItemPedido();
-		itemPedido.setValorunitario(produto.getValor());
-		itemPedido.setQuantidade(quantidade);
-
-		pedido.setValor(produto.getValor() * quantidade);
-
-		this.itens = new ArrayList<>();
-		this.itens.add(itemPedido);
+		this.itensPedido = itensPedido;
 	}
 
 	public Long getId() {
@@ -73,28 +80,28 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public Double getValor() {
-		return valor;
+	public Double getValortotal() {
+		return valortotal;
 	}
 
-	public void setValor(Double valor) {
-		this.valor = valor;
+	public void setValortotal(Double valortotal) {
+		this.valortotal = valortotal;
 	}
 
-	public StatusPedido getEstado() {
-		return StatusPedido.toEnum(estado);
+	public Integer getEstado() {
+		return estado;
 	}
 
-	public void setEstado(StatusPedido estado) {
-		this.estado = estado.getCod();
+	public void setEstado(Integer estado) {
+		this.estado = estado;
 	}
 
-	public List<ItemPedido> getItens() {
-		return itens;
+	public Date getDatapedido() {
+		return datapedido;
 	}
 
-	public void setItens(List<ItemPedido> itens) {
-		this.itens = itens;
+	public void setDatapedido(Date datapedido) {
+		this.datapedido = datapedido;
 	}
 
 	public Usuario getUsuario() {
@@ -111,6 +118,14 @@ public class Pedido {
 
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
+	}
+
+	public List<ItemPedido> getItensPedido() {
+		return itensPedido;
+	}
+
+	public void setItensPedido(List<ItemPedido> itensPedido) {
+		this.itensPedido = itensPedido;
 	}
 
 	@Override
@@ -138,12 +153,10 @@ public class Pedido {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", " + "valor=" + valor + ", " + "estado=" + estado + ", " + "usuario=" + usuario
-				+ ", " + "mesa=" + mesa + ", " + "itens=" + itens + "]";
+		return "Pedido [id=" + id + ", valortotal=" + valortotal + ", estado=" + estado + ", datapedido=" + datapedido
+				+ ", usuario=" + usuario + ", mesa=" + mesa + ", itensPedido=" + itensPedido + "]";
 	}
+
 }

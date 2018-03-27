@@ -7,8 +7,9 @@ CREATE TABLE web_item_pedido (
   id_produto bigint(20) NOT NULL,
   id_pedido bigint(20) NOT NULL,
   quantidade varchar(45) COLLATE utf8_bin NOT NULL,
-  vr_unitario double NOT NULL,
-  observacao varchar(500) COLLATE utf8_bin
+  valor_unitario double NOT NULL,
+  valor_total double NOT NULL,
+  observacao varchar(500) COLLATE utf8_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
