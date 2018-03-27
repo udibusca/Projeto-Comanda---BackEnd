@@ -1,0 +1,18 @@
+Model/Domain            – Aonde ficam as entidades que representam tabelas de bancos de dados e tipos.
+Repository/Repositories – Repositórios do Spring Data JPA responsáveis pelo acesso a dados.
+Service/Services        – Classes de serviço e/ou negócio.
+Controller/Resorces     – Camada intermediária entre a view e a camada de serviços.
+
+App        : Classe usada para inicialização da aplicação.
+AppTest    : Classe base para codificação dos testes .
+pom.xml    : Definições da build.
+application.properties: Aonde são realizadas configurações diversas.
+
+
+Arquivo ClasseResourse que contem o mapeamento chama a ClasseService que contem as regras de negocios 
+que por vez chama a ClasseRepository que tem a implementação do Jpa para persistir no banco,
+no caso do pedido. fica da seuinte maneira:
+
+
+PedidoResourse -> PedidoService -> PedidoRepository
+                                   PedidoRepositoryQuery -> PedidoRepositoryImpl
