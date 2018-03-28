@@ -21,8 +21,8 @@ import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "web_pedido")
-public class Pedido  implements Serializable {
-	private static final long serialVersionUID=1L;
+public class Pedido implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +44,10 @@ public class Pedido  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_mesa")
 	private Mesa mesa;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="pedido", cascade=CascadeType.ALL)
-	private List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
+	private List<ItemPedido> itens = new ArrayList<>();
 
 	public Pedido() {
 
@@ -59,17 +59,17 @@ public class Pedido  implements Serializable {
 	 * @param datapedido
 	 * @param usuario
 	 * @param mesa
-	 * @param itensPedido
+	 * @param itens
 	 */
 	public Pedido(Double valortotal, Integer estado, Date datapedido, Usuario usuario, Mesa mesa,
-			List<ItemPedido> itensPedido) {
+			List<ItemPedido> itens) {
 		super();
 		this.valortotal = valortotal;
 		this.estado = estado;
 		this.datapedido = datapedido;
 		this.usuario = usuario;
 		this.mesa = mesa;
-		this.itensPedido = itensPedido;
+		this.itens = itens;
 	}
 
 	public Long getId() {
@@ -120,12 +120,12 @@ public class Pedido  implements Serializable {
 		this.mesa = mesa;
 	}
 
-	public List<ItemPedido> getItensPedido() {
-		return itensPedido;
+	public List<ItemPedido> getItens() {
+		return itens;
 	}
 
-	public void setItensPedido(List<ItemPedido> itensPedido) {
-		this.itensPedido = itensPedido;
+	public void setItens(List<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override
@@ -151,12 +151,6 @@ public class Pedido  implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Pedido [id=" + id + ", valortotal=" + valortotal + ", estado=" + estado + ", datapedido=" + datapedido
-				+ ", usuario=" + usuario + ", mesa=" + mesa + ", itensPedido=" + itensPedido + "]";
 	}
 
 }

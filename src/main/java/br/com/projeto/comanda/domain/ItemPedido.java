@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "web_item_pedido")
@@ -38,11 +37,12 @@ public class ItemPedido implements Serializable {
 	@Column(name = "observacao")
 	private String observacao;
 
-	@ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_pedido")
 	private Pedido pedido;
 
-	@ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_produto")
 	private Produto produto;
 
@@ -67,6 +67,7 @@ public class ItemPedido implements Serializable {
 		this.observacao = observacao;
 		this.pedido = pedido;
 		this.produto = produto;
+
 	}
 
 	public Long getId() {
@@ -148,13 +149,6 @@ public class ItemPedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "ItemPedido [id=" + id + ", quantidade=" + quantidade + ", valorunitario=" + valorunitario
-				+ ", valortotal=" + valortotal + ", observacao=" + observacao + ", pedido=" + pedido + ", produto="
-				+ produto + "]";
 	}
 
 }
