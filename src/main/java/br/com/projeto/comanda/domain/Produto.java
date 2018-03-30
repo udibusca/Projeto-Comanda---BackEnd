@@ -1,7 +1,9 @@
 package br.com.projeto.comanda.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,13 +44,16 @@ public class Produto implements Serializable {
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 	
-	//@JsonIgnore
 	@ManyToMany(mappedBy = "produto")
 	private List<Adicional> adicional;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="produto")
 	private List<Produto> produto;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Produto(){
 		

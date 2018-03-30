@@ -7,8 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.projeto.comanda.domain.ItemPedido;
+import br.com.projeto.comanda.domain.Mesa;
 import br.com.projeto.comanda.domain.Pedido;
+import br.com.projeto.comanda.domain.Usuario;
+import br.com.projeto.comanda.domain.enums.StatusPedido;
+import br.com.projeto.comanda.repositories.ItemPedidoRepository;
 import br.com.projeto.comanda.repositories.PedidoRepository;
+import br.com.projeto.comanda.repositories.ProdutoRepository;
 import br.com.projeto.comanda.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -18,6 +24,12 @@ public class PedidoService {
 
 	@Autowired
 	private PedidoRepository repo;
+
+	@Autowired
+	private ProdutoRepository repoproduto;
+
+	@Autowired
+	private ItemPedidoRepository repoitempedido;
 
 	public Pedido pesquisaPedidoPorId(Long id) {
 		Pedido retornoPedido = repo.pesquisaPedidoPorId(id);
@@ -32,13 +44,46 @@ public class PedidoService {
 	}
 
 	public Pedido salvarPedido(Pedido pedido) {
-		try {
-			System.err.println("salvar pedido criar metodo de salvar o pedido");
 
-		} catch (Exception e) {
-			throw new ObjectNotFoundException("Objeto não encontrado! : " + Pedido.class.getName());
+		if (pedido == null) {
+			throw new ObjectNotFoundException("Não é possivel salvar o pedido");
 		}
+		pedido.setId(null);
+		double valortotal = calcularTotal(pedido);
+		int estado = StatusPedido.PENDENTE.ordinal();
+		java.util.Date data = new java.util.Date();
+		java.sql.Date dataatual = new java.sql.Date(data.getTime());
+		Usuario usuario = pedido.getUsuario();
+		Mesa mesa = pedido.getMesa();
+		Pedido pedidosalva = new Pedido(valortotal, estado, dataatual, usuario, mesa);
+		repo.salvarPedidoCompleto(pedidosalva);
+
+		if (pedido.getItens() == null || pedido.getItens().isEmpty()) {
+			throw new ObjectNotFoundException("Pedido não tem itens para serrem salvos");
+		}
+
+		for (ItemPedido itemS : pedido.getItens()) {
+
+			itemS.setProduto(repoproduto.findOne(itemS.getProduto().getId()));
+			itemS.setPedido(repo.findOne(pedidosalva.getId()));
+			itemS.setQuantidade(itemS.getQuantidade());
+			itemS.setValorunitario(itemS.getProduto().getValor());
+			itemS.setValortotal(itemS.getProduto().getValor() * itemS.getQuantidade());
+			itemS.setObservacao(itemS.getObservacao());
+
+		}
+		repoitempedido.save(pedido.getItens());
+
 		return pedido;
+
 	}
 
+	private double calcularTotal(Pedido pedido) {
+		double valorTotal = 0.00;
+		for (ItemPedido itemS : pedido.getItens()) {
+			valorTotal += itemS.getValortotal();
+		}
+		return valorTotal;
+	}	
+	
 }

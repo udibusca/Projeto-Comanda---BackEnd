@@ -7,5 +7,6 @@ import br.com.projeto.comanda.domain.ItemPedido;
 
 @Repository
 public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Long>{
+	
 
 }

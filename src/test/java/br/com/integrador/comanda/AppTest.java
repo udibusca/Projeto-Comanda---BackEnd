@@ -8,6 +8,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class AppTest {
 	
-//Pedido pedido = new Pedido(4, null, 0, 1, 1);
-	
 }

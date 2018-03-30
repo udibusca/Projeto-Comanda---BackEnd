@@ -2,14 +2,9 @@ package br.com.projeto.comanda.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -20,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ItemPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@JsonIgnore
+	@EmbeddedId
+	private ItemPedidoProduto id = new ItemPedidoProduto();
 
 	@NotNull
 	@Column(name = "quantidade")
@@ -37,47 +32,37 @@ public class ItemPedido implements Serializable {
 	@Column(name = "observacao")
 	private String observacao;
 
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_pedido")
-	private Pedido pedido;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_produto")
-	private Produto produto;
-
 	public ItemPedido() {
-
 	}
 
-	/**
-	 * @param quantidade
-	 * @param valorunitario
-	 * @param valortotal
-	 * @param observacao
-	 * @param pedido
-	 * @param produto
-	 */
-	public ItemPedido(Integer quantidade, Double valorunitario, Double valortotal, String observacao, Pedido pedido,
-			Produto produto) {
+	public ItemPedido(Pedido pedido, Produto produto, Integer quantidade, Double valorunitario, Double valortotal,
+			String observacao) {
 		super();
+		id.setPedido(pedido);
+		id.setProduto(produto);
 		this.quantidade = quantidade;
 		this.valorunitario = valorunitario;
 		this.valortotal = valortotal;
 		this.observacao = observacao;
-		this.pedido = pedido;
-		this.produto = produto;
-
 	}
 
-	public Long getId() {
-		return id;
+	@JsonIgnore
+	public Pedido getPedido() {
+		return id.getPedido();
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
 	}
-
+	
+	public Produto getProduto() {
+		return id.getProduto();
+	}
+	
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
+	
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -108,22 +93,6 @@ public class ItemPedido implements Serializable {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
-	}
-
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
 	}
 
 	@Override

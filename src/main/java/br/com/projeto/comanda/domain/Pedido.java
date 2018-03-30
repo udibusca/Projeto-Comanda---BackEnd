@@ -2,10 +2,9 @@ package br.com.projeto.comanda.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "web_pedido")
@@ -34,6 +33,7 @@ public class Pedido implements Serializable {
 	@NotNull
 	private Integer estado;
 
+	@JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss")
 	@Column(name = "data_pedido")
 	private Date datapedido;
 
@@ -45,31 +45,20 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "id_mesa")
 	private Mesa mesa;
 
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
-	private List<ItemPedido> itens = new ArrayList<>();
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 
 	public Pedido() {
-
+		
 	}
-
-	/**
-	 * @param valortotal
-	 * @param estado
-	 * @param datapedido
-	 * @param usuario
-	 * @param mesa
-	 * @param itens
-	 */
-	public Pedido(Double valortotal, Integer estado, Date datapedido, Usuario usuario, Mesa mesa,
-			List<ItemPedido> itens) {
+	
+	public Pedido(Double valortotal, Integer estado, Date datapedido, Usuario usuario, Mesa mesa) {
 		super();
 		this.valortotal = valortotal;
 		this.estado = estado;
 		this.datapedido = datapedido;
 		this.usuario = usuario;
 		this.mesa = mesa;
-		this.itens = itens;
 	}
 
 	public Long getId() {
@@ -120,11 +109,11 @@ public class Pedido implements Serializable {
 		this.mesa = mesa;
 	}
 
-	public List<ItemPedido> getItens() {
+	public Set<ItemPedido> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<ItemPedido> itens) {
+	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
 

@@ -8,6 +8,7 @@ public interface PedidoRepositoryQuery {
 
 	public List<Pedido> pesquisaTodosPedidos();
 	public Pedido pesquisaPedidoPorId(Long id);
-	Pedido salvarPedidoCompleto(Pedido pedido);
+	public Pedido salvarPedidoCompleto(Pedido pedido);
+	public Long buscaUltimoPedidoSalvo();
 	
 }
