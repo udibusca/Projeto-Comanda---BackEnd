@@ -1,7 +1,6 @@
 package br.com.projeto.comanda.repositories.pedido;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -10,9 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.projeto.comanda.domain.ItemPedido;
 import br.com.projeto.comanda.domain.Pedido;
-import br.com.projeto.comanda.repositories.ItemPedidoRepository;
 import br.com.projeto.comanda.repositories.PedidoRepository;
 import br.com.projeto.comanda.services.exceptions.ObjectNotFoundException;
 
@@ -23,9 +20,6 @@ public class PedidoRepositoryImpl implements PedidoRepositoryQuery {
 
 	@Autowired
 	private PedidoRepository repo;
-	
-	@Autowired
-	private ItemPedidoRepository repoitempedido;
 
 	@Override
 	public Pedido pesquisaPedidoPorId(Long id) {
@@ -65,7 +59,7 @@ public class PedidoRepositoryImpl implements PedidoRepositoryQuery {
 		return pedido;
 
 	}
-	
+
 	public Long buscaUltimoPedidoSalvo() {
 		Long id = null;
 		try {

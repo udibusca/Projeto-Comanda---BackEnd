@@ -55,7 +55,7 @@ public class PedidoService {
 		java.sql.Date dataatual = new java.sql.Date(data.getTime());
 		Usuario usuario = pedido.getUsuario();
 		Mesa mesa = pedido.getMesa();
-		Pedido pedidosalva = new Pedido(valortotal, estado, dataatual, usuario, mesa);
+		Pedido pedidosalva = new Pedido(formataValor(valortotal), estado, dataatual, usuario, mesa);
 		repo.salvarPedidoCompleto(pedidosalva);
 
 		if (pedido.getItens() == null || pedido.getItens().isEmpty()) {
@@ -73,7 +73,6 @@ public class PedidoService {
 
 		}
 		repoitempedido.save(pedido.getItens());
-
 		return pedido;
 
 	}
@@ -84,6 +83,11 @@ public class PedidoService {
 			valorTotal += itemS.getValortotal();
 		}
 		return valorTotal;
-	}	
-	
+	}
+
+	public static double formataValor(double x) {
+		String.format("%.2f", x);
+		return x;
+	}
+
 }

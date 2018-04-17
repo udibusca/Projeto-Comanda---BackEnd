@@ -39,7 +39,7 @@ public class Produto implements Serializable {
 	
     private Integer situacao;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;

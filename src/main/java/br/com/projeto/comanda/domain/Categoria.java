@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "web_categoria")
 public class Categoria implements Serializable {
@@ -27,7 +29,7 @@ public class Categoria implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-
+	@JsonIgnore
 	@OneToMany(mappedBy="categoria", cascade=CascadeType.ALL)
 	private List<Produto> produto;
 	
