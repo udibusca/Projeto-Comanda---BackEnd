@@ -1,4 +1,4 @@
-# IFTM - UBERLANDIA 11/09/2017
+# UBERLANDIA 11/09/2017
 
 ### ::: Projeto utilizando Spring Boot :::
 
