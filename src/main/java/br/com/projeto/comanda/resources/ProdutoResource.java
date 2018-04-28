@@ -62,5 +62,17 @@ public class ProdutoResource {
 	public void remover(@PathVariable Long id) {
 		produtoDAO.delete(id);
 	}
+	
+	@GetMapping("/categoria/{id}")
+	public ResponseEntity<Produto> buscarProdutoPorIdCategoria(@PathVariable Long id) {
+
+		Produto produto = produtoservice.find(id);
+
+		if (produto != null) {
+			return ResponseEntity.ok().body(produto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}	
 
 }
