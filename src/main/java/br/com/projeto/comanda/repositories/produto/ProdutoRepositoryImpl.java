@@ -19,7 +19,8 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQuery {
 	public List<Produto> findByCategory(Long idCategoria) {
 		List<Produto> produtos = null;
 		try {
-			produtos = em.createQuery("select * from Produto p WHERE p.id_categoria= :idCategoria", Produto.class)
+			produtos = em.createQuery("select p from Produto p, Categoria c WHERE "
+					+ "p.categoria.id = c.id and c.id= :idCategoria",Produto.class)
 					.setParameter("idCategoria", idCategoria).getResultList();
 		} catch (NoResultException e) {
 			throw new ObjectNotFoundException(Pedido.class.getSimpleName() + " não encontrado! Id: " + idCategoria);
@@ -29,4 +30,4 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQuery {
 		return produtos;
 	}
 
-}
+} // SELECT * FROM web_produto p, web_categoria c WHERE p.id_categoria = c.id and c.id = 2;

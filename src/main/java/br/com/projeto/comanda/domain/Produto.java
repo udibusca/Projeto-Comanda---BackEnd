@@ -24,42 +24,42 @@ import br.com.projeto.comanda.domain.enums.StatusProduto;
 @Entity
 @Table(name = "web_produto")
 public class Produto implements Serializable {
-		private static final long serialVersionUID=1L;
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotNull
 	private String descricao;
-	
+
 	@NotNull
-	@Column(name="valor")
-    private double valor;
-	
-    private Integer situacao;
-	
-	//@JsonIgnore
+	@Column(name = "valor")
+	private double valor;
+
+	private Integer situacao;
+
+	// @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
-	
+
 	@ManyToMany(mappedBy = "produto")
 	private List<Adicional> adicional;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="produto")
+	@OneToMany(mappedBy = "produto")
 	private List<Produto> produto;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="id.produto")
+	@OneToMany(mappedBy = "id.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
-	
-	public Produto(){
-		
+
+	public Produto() {
+
 	}
-	
-	public Produto(Long id,String descricao, double valor, StatusProduto situacao, Categoria categoria) {
+
+	public Produto(Long id, String descricao, double valor, StatusProduto situacao, Categoria categoria) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -107,7 +107,7 @@ public class Produto implements Serializable {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
+
 	public List<Adicional> getAdicional() {
 		return adicional;
 	}
@@ -140,5 +140,5 @@ public class Produto implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }

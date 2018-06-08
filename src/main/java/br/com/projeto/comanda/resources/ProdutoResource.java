@@ -64,9 +64,9 @@ public class ProdutoResource {
 	}
 	
 	@GetMapping("/categoria/{id}")
-	public ResponseEntity<Produto> buscarProdutoPorIdCategoria(@PathVariable Long id) {
+	public ResponseEntity<List<Produto>> buscarProdutoPorIdCategoria(@PathVariable Long id) {
 
-		Produto produto = produtoservice.find(id);
+		List<Produto> produto = produtoservice.findByCategory(id);
 
 		if (produto != null) {
 			return ResponseEntity.ok().body(produto);
