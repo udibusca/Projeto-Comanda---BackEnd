@@ -28,7 +28,7 @@ public class ProdutoService {
 		List<Produto> produtos = produtorepository.findByCategory(idCategoria);
 		if (produtos == null || produtos.isEmpty()) {
 			throw new ObjectNotFoundException(
-					"Objeto não encontrado! Id: " + idCategoria + ", Tipo: " + Produto.class.getName());
+					"Não encontrado produto(s) para a categoria selecionada !");
 		}
 		return produtos;
 	}
